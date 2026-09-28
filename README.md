@@ -18,6 +18,9 @@ Logs → Pandas前処理 → ルールベース異常検知 → リスクスコ�
 文章を生成している。generate_explanation()のインターフェースは変えずに、
 将来的にLLM API呼び出しへ差し替え可能な設計にしている。
 
+## Demo
+https://cyberlog-assistant.streamlit.app
+
 ## Limitations
 - 学習・検証目的のプロトタイプであり、実運用のSOC自動遮断等には使用しない
 - 誤検知・見逃しの可能性があり、最終判断は人間が行う設計
