@@ -16,12 +16,20 @@ if uploaded or use_sample:
     df = pd.read_csv(uploaded) if uploaded else pd.read_csv("sample_logs.csv")
     df["timestamp"] = pd.to_datetime(df["timestamp"])
 
-    st.subheader("ログ概要")
-    st.dataframe(df.head(20))
-
     with st.spinner("異常を検知中..."):
         alerts = run_all_detections(df)
         scored = score_alerts(alerts)
+
+    # 統計サマリー
+    critical_high = sum(1 for v in scored.values() if v["level"] in ("Critical", "High"))
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("総ログ件数", len(df))
+    col2.metric("要確認ユーザー/IP", len(scored))
+    col3.metric("Critical + High", critical_high)
+    col4.metric("検知アラート総数", len(alerts))
+
+    st.subheader("ログ概要")
+    st.dataframe(df.head(20))
 
     st.subheader(f"検知結果：{len(scored)} 件の要確認ユーザー/IP")
     for user, info in sorted(scored.items(), key=lambda x: -x[1]["score"]):
